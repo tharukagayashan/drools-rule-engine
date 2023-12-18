@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/rule")
@@ -18,14 +19,19 @@ public class RuleController {
         this.ruleService = ruleService;
     }
 
-    @PostMapping("/addRule")
+    @PostMapping
     public ResponseEntity<RuleDto> addRule(@RequestBody RuleCreateReqDto ruleCreateReqDto){
         return ruleService.addRule(ruleCreateReqDto);
     }
 
-    @GetMapping("/getAllRules")
+    @GetMapping
     public ResponseEntity<List<RuleDto>> getAllRules(){
         return ruleService.getAllRules();
+    }
+
+    @DeleteMapping("/{ruleId}")
+    public ResponseEntity<String> deleteRule(@PathVariable Long ruleId){
+        return ruleService.deleteRule(ruleId);
     }
 
 }

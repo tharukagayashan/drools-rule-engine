@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RuleServiceImpl implements RuleService {
@@ -58,4 +59,29 @@ public class RuleServiceImpl implements RuleService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public ResponseEntity<String> deleteRule(Long ruleId) {
+        try {
+            if (ruleId == null) {
+                throw new RuntimeException("Rule Id is null");
+            } else {
+                Optional<Rule> rule = ruleDao.findById(ruleId);
+                if (rule.isPresent()) {
+                    ruleDao.delete(rule.get());
+                    Optional<Rule> rule1 = ruleDao.findById(ruleId);
+                    if (rule1.isPresent()) {
+                        throw new RuntimeException("Rule not deleted");
+                    } else {
+                        return ResponseEntity.ok("Rule deleted successfully");
+                    }
+                } else {
+                    throw new RuntimeException("Rule not found");
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }
