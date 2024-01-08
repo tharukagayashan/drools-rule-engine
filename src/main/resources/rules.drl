@@ -1,0 +1,25 @@
+import com.projects.ruleengine.dto.TranReqDto;
+global com.projects.ruleengine.dto.TranResDto response;
+
+dialect "mvel"
+
+rule "Rule 01"
+    when
+        TranReqDto(tranAmount >= 100000)
+    then
+        response.setMessage("Fraud Transaction");
+end;
+
+rule "Rule 02"
+    when
+        TranReqDto(tranAmount > 5000)
+    then
+        response.setMessage("Normal Transaction");
+end;
+
+rule "Rule 03"
+    when
+        TranReqDto(tranAmount < 5000)
+    then
+        response.setMessage("Small Transaction");
+end;

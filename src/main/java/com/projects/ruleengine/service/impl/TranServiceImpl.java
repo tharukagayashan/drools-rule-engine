@@ -31,6 +31,7 @@ public class TranServiceImpl implements TranService {
 
             TranResDto tranResDto = new TranResDto();
             KieSession kieSession = kieContainer.newKieSession();
+            kieSession.insert(tranReqDto);
             kieSession.insert(tranResDto);
             kieSession.fireAllRules();
             kieSession.dispose();
