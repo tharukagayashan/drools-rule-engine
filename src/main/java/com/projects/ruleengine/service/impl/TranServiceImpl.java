@@ -1,7 +1,5 @@
 package com.projects.ruleengine.service.impl;
 
-import com.projects.ruleengine.config.DroolsConfig;
-import com.projects.ruleengine.dao.RuleDao;
 import com.projects.ruleengine.dto.TranReqDto;
 import com.projects.ruleengine.dto.TranResDto;
 import com.projects.ruleengine.service.TranService;
@@ -14,25 +12,21 @@ import org.springframework.stereotype.Service;
 public class TranServiceImpl implements TranService {
 
     private final KieContainer kieContainer;
-    private static RuleDao ruleDao;
 
-    public TranServiceImpl(KieContainer kieContainer, RuleDao ruleDao) {
+    public TranServiceImpl(KieContainer kieContainer) {
         this.kieContainer = kieContainer;
-        this.ruleDao = ruleDao;
     }
+
 
     @Override
     public ResponseEntity<TranResDto> executeRules(TranReqDto tranReqDto) {
         try {
 
-//            DroolsConfig customMethods = new DroolsConfig();
-//            String drl = customMethods.writeRulesToDrlFile(ruleDao);
-//            System.out.println(drl);
-
             TranResDto tranResDto = new TranResDto();
             KieSession kieSession = kieContainer.newKieSession();
-            kieSession.insert(tranReqDto);
             kieSession.insert(tranResDto);
+            kieSession.insert(tranReqDto);
+            kieSession.setGlobal("response", tranResDto);
             kieSession.fireAllRules();
             kieSession.dispose();
             return ResponseEntity.ok(tranResDto);

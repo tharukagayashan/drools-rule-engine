@@ -20,9 +20,9 @@ public class RuleEngineApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RuleEngineApplication.class, args);
 
-//		DroolsConfig customMethods = new DroolsConfig();
-//
-//		customMethods.writeRulesToDrlFile(ruleDao);
+		DroolsConfig customMethods = new DroolsConfig();
+
+		customMethods.writeRulesToDrlFile(ruleDao);
 
 	}
 

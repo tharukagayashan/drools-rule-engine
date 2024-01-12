@@ -26,6 +26,7 @@ public class DroolsConfig {
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_DRL));
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
+        kieBuilder.buildAll();
         KieModule kieModule = kieBuilder.getKieModule();
         return kieServices.newKieContainer(kieModule.getReleaseId());
     }
@@ -39,13 +40,15 @@ public class DroolsConfig {
         for (Rule rule : ruleList) {
             ruleStr.append("rule \"").append(rule.getRuleName()).append("\"\n")
                     .append("   when\n")
-                    .append("      TranReqDto(").append(rule.getConditions()).append(")\n")
+                    .append("       transaction:TranReqDto(").append(rule.getConditions()).append(")\n")
                     .append("   then\n")
-                    .append("      response.setMessage(\"").append(rule.getAction()).append("\");\n")
-                    .append("end;\n\n");
+                    .append("       response.setMessage(\"").append(rule.getAction()).append("\");\n")
+                    .append("       System.out.println(\"").append("call").append("\");\n")
+                    .append("end\n\n");
         }
 
-        drl.append("import com.projects.ruleengine.dto.TranReqDto;\n")
+        drl.append("package com.projects.ruleengine;\n\n")
+                .append("import com.projects.ruleengine.dto.TranReqDto;\n")
                 .append("global com.projects.ruleengine.dto.TranResDto response;\n\n")
                 .append("dialect \"mvel\"\n\n")
                 .append(ruleStr);
